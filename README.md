@@ -26,12 +26,14 @@ To run the Python code, navigate to the directory containing the files and execu
 
 ```bash
 python fullcode.py
-Make sure that all files are in the same directory.
 ```
+
+Make sure that all files are in the same directory.
+
 
 ### Project Report
 
-###Introduction
+### Introduction
 
 This project aims to protect the maximum number of families in certain areas against criminal activity. We have a budget available for each set of maps (territories) divided into MxN equal parts.
 
