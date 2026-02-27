@@ -1,66 +1,147 @@
-[ProblemToSolve.pdf](https://github.com/user-attachments/files/16331841/ProblemToSolve.pdf) - Downloadable file with the problem instructions. 
+# Corporate Blind Search Control Room
 
+A production-structured modernization of an academic blind-search algorithm into a corporate decision-support platform.
 
-# Artificial Intelligence Blind Search Algorithm
+The system simulates how a security operations team can deploy mobile response stations under strict budget constraints to maximize protected population in high-risk zones.
 
-## Description
+## Project Overview
+This repository converts a single-script academic implementation into a modular backend + interactive website with:
+- live BFS/DFS depth-limited simulation,
+- measurable operational KPIs,
+- structured API for scenario execution,
+- deployment-ready engineering standards.
 
-This repository contains the solution for a project in the Artificial Intelligence course, focused on protecting the maximum number of families in certain areas against criminal activity using a blind search algorithm.
+## Business Problem
+Large retail and logistics organizations must decide where to deploy limited security resources.
+Given a fixed budget and possible station radius combinations, the platform searches relocation states to maximize protected families in risk-weighted territory grids.
 
-## Project Structure
-
-This project includes the following files:
-- `fullcode.py`: The main Python script implementing the blind search algorithm.
-- `Excel Relatório IIA 2201529 EfolioA.xlsx`: Excel report file.
-- `Relatório escrito.pdf`: Detailed written report.
-
-## Instructions for Running the Code
-
-### Prerequisites
-
-Ensure you have Python installed on your system. The project was developed using Python 3.x.
-
-### Running the Python Code
-
-To run the Python code, navigate to the directory containing the files and execute the following command:
-
-```bash
-python fullcode.py
+## Architecture Diagram
+```text
+[Web Control Room UI]
+        |
+        | REST
+        v
+[FastAPI Controller Layer] -------------------------+
+        |                                           |
+        v                                           v
+[Search Engine: BFS/DFS Limited]         [Territory + Budget Data Catalog]
+        |                                           |
+        +-------------------[Metrics + Trace]-------+
+                            |
+                            v
+                    [Telemetry & Benchmark Views]
 ```
 
-Make sure that all files are in the same directory.
+## Tech Stack
+- Python 3.11
+- FastAPI + Uvicorn
+- Vanilla HTML/CSS/JavaScript
+- Pytest
+- Docker + Docker Compose
+- GitHub Actions CI
 
+## Project Structure
+```text
+.
+├── src/blindsearch_engine/
+│   ├── api/
+│   │   ├── app.py
+│   │   ├── schemas.py
+│   │   └── static/
+│   ├── core/
+│   │   ├── data.py
+│   │   └── models.py
+│   ├── engine/
+│   │   └── search.py
+│   └── utils/
+├── tests/
+├── configs/
+├── scripts/
+├── docs/
+├── legacy/academic_project/
+├── Dockerfile
+├── docker-compose.yml
+├── Makefile
+└── .env.example
+```
 
-### Project Report
+## Setup Instructions
+### 1. Local environment
+```bash
+cp .env.example .env
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-### Introduction
+### 2. Run the application
+```bash
+./scripts/run_api.sh
+```
+Open `http://localhost:8080`.
 
-This project aims to protect the maximum number of families in certain areas against criminal activity. We have a budget available for each set of maps (territories) divided into MxN equal parts.
+### 3. Run tests
+```bash
+./scripts/test.sh
+```
 
-### Algorithms Used
+## CI/CD Overview
+CI pipeline (`.github/workflows/ci.yml`) runs on push/PR to `main`:
+- dependency installation,
+- automated tests,
+- quality gate before merge.
 
-For this exercise, two algorithms were tested:
+Recommended CD path:
+- release tags (`vX.Y.Z`),
+- Docker image publish,
+- deployment to container-hosting platform.
 
-Breadth-First Search with Depth Limit
-Depth-First Search with Depth Limit
+## Data Versioning Strategy
+Current territory and budget data are versioned directly in Git (`core/data.py`) for deterministic reproducibility.
+For scale-up:
+- move large evolving scenario datasets to DVC,
+- track scenario snapshots by release tags,
+- introduce remote storage for enterprise governance.
 
-Due to the nature of the problem, these algorithms were chosen over others studied so far. Testing revealed that an unbounded search results in an infinite loop consuming significant computer memory, leading to resource exhaustion without yielding a solution.
+## Model Tracking Strategy
+This project uses deterministic search logic, not ML models.
+If predictive risk scoring is added in future:
+- use MLflow for experiment and model tracking,
+- link dataset versions via DVC,
+- apply promotion gates in CI.
 
-## Implementation Details
+## Deployment Strategy
+### Docker
+```bash
+docker compose up --build
+```
+Application becomes available at `http://localhost:8080`.
 
-- **Budget Combinations**: A dictionary was created to store possible budget combinations based on the given constraints.
-- **Map Dimensions**: Limits were established to ensure that police stations do not extend beyond the map dimensions and do not overlap.
-- **Performance Comparison**: Depth-limited search outperformed breadth-limited search in terms of state expansions and execution time, particularly evident in larger instances.
+### Production recommendation
+- run behind reverse proxy/load balancer,
+- enable autoscaling,
+- centralize logs and metrics.
 
-# Results and Analysis
+## Security Considerations
+- no hardcoded credentials,
+- environment-based config via `.env`,
+- `.gitignore` protects local secrets and artifacts,
+- input validation on API payloads,
+- structured logs for auditability.
 
-- **Depth-Limited Search:** Efficiently found solutions within the given depth limit.
-- **Breadth-Limited Search:** Generated more states and took longer to execute compared to depth-limited search.
+## Lessons Learned
+- modular architecture dramatically improves maintainability vs monolithic scripts,
+- algorithm transparency (live trace) improves stakeholder trust,
+- repository hygiene is essential for interview and production readiness.
 
-## Performance Metrics
+## Future Improvements
+- add persistent scenario storage (PostgreSQL),
+- add authentication/authorization,
+- stream trace via WebSockets for true real-time updates,
+- add rate limiting and API contract tests,
+- integrate observability stack (Prometheus + Grafana).
 
-Execution time was a key indicator of performance, with depth-limited search showing clear advantages in larger instances.
-
-## Conclusion
-
-The depth-limited search algorithm proved to be more effective for this problem, offering a balance between depth exploration and state expansion. The written report provides a detailed analysis of the algorithms' performance and implementation.
+## Additional Documentation
+- Technical audit: `docs/repository_audit.md`
+- Technical deep dive + interview prep: `docs/TECHNICAL_OVERVIEW.md`
+- Portfolio package: `docs/portfolio_ready.md`
