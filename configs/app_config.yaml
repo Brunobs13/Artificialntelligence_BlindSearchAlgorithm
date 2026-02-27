@@ -1,0 +1,19 @@
+application:
+  name: corporate-blind-search-control-room
+  owner: mlops-data-engineering
+
+runtime:
+  host: 0.0.0.0
+  port: 8080
+  env: development
+
+audit:
+  secret_scanning: enabled
+  commit_policy: conventional_commits
+
+algorithm:
+  strategies:
+    - bfs_limited
+    - dfs_limited
+  default_depth_limit: 6
+  default_max_states: 50000
